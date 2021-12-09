@@ -5,32 +5,37 @@ using UnityEngine;
 public class CastErScript : MonoBehaviour
 {
 
-    //code for waypoints
 
-    public GameObject[] waypoints;
-    int current = 0;
-    float rotSpeed;
-    public float speed;
-    float WPradius = 0.5f;
+    public int speed = 1;
 
 
-    public int attempt = 1;
 
 
-    //code for waypoints and movement
+
+    void Start()
+    {
+      
+
+    }
+
+
 
     void Update()
     {
-        if (Vector3.Distance(waypoints[current].transform.position, transform.position) < WPradius)
-        {
-
-            current++;
-            if (current >= waypoints.Length)
-            {
-                current = 0;
-            }
-        }
-        transform.position = Vector3.MoveTowards(transform.position, waypoints[current].transform.position, Time.deltaTime * speed);
+        transform.Translate(Vector3.left * Time.deltaTime * speed); //Cast-Er automaticly goes to the left
+   
     }
+   
+    
+   
+    // Cast-Er goes up when colliding with the Wall
+    private void OnCollisionStay(Collision collision)
+    {
+       if (collision.gameObject.CompareTag ("Wall"))
+       {
+          transform.Translate(Vector3.forward * Time.deltaTime * speed);
+       }
 
+   
+    }
 }
