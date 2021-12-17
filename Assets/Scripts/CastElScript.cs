@@ -10,12 +10,16 @@ public class CastElScript : MonoBehaviour
     public int speed = 1;
     public int attempt = 1;
     Dictionary<string, Vector3> dict = new Dictionary<string, Vector3>();
+    public ParticleSystem goalParticle;
+    public AudioClip winSound;
+    public AudioSource _as;
     
 
 
     // Start is called before the first frame update
     void Start()
     {
+        _as = GetComponent<AudioSource> ();
 
 
     }
@@ -43,7 +47,10 @@ public class CastElScript : MonoBehaviour
         {
             Debug.Log("You win! It took you " + attempt + " attempt(s)!");
             attempt = 1;
-            SceneManager.LoadScene("SecondLevel"); // Load next Level when Goal is reached
+            _as.PlayOneShot(winSound);
+            StartCoroutine(WaitForIt(3.0F));
+            Instantiate(goalParticle);
+
 
         }
 
@@ -59,6 +66,12 @@ public class CastElScript : MonoBehaviour
             }
         }
     }
+
+    IEnumerator WaitForIt(float waitTime)
+{
+    yield return new WaitForSeconds(waitTime);
+    SceneManager.LoadScene("SecondLevel");
+}
 
 
 }
