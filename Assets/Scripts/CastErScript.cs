@@ -7,10 +7,8 @@ public class CastErScript : MonoBehaviour
 
 
     public int speed = 1;
-
-
-
-
+    private bool walkingLeft = false;   //define flag for walk-direction
+    
 
     void Start()
     {
@@ -22,20 +20,30 @@ public class CastErScript : MonoBehaviour
 
     void Update()
     {
-        transform.Translate(Vector3.left * Time.deltaTime * speed); //Cast-Er automaticly goes to the left
-   
+        if(walkingLeft)     //depending on state of walkdirection flag, either walk left or up, state of the flag is set below on collision
+        {
+            transform.Translate(Vector3.left * Time.deltaTime * speed); 
+        }
+        else
+        {
+            transform.Translate(Vector3.forward * Time.deltaTime * speed);
+        }
     }
    
     
-   
-    // Cast-Er goes up when colliding with the Wall
-    private void OnCollisionStay(Collision collision)
-    {
-       if (collision.gameObject.CompareTag ("Wall"))
+   private void OnTriggerEnter(Collider other)   
+   {    
+       Debug.Log("hit");
+       if(other.tag == "Wall")      //if caster walks into a wall, the walk-direction flag is changed
        {
-          transform.Translate(Vector3.forward * Time.deltaTime * speed);
+           if(walkingLeft)
+           {
+               walkingLeft = false;
+           }
+           else if(!walkingLeft)
+           {
+               walkingLeft = true;
+           }
        }
-
-   
-    }
+   }
 }
