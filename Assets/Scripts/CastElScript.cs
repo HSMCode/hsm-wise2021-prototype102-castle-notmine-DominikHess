@@ -13,6 +13,9 @@ public class CastElScript : MonoBehaviour
     public ParticleSystem goalParticle;
     public AudioClip winSound;
     public AudioSource _as;
+    public AudioClip[] insults;
+
+    private bool stop = false;
     
 
 
@@ -20,6 +23,7 @@ public class CastElScript : MonoBehaviour
     void Start()
     {
         _as = GetComponent<AudioSource> ();
+        stop = false;
 
 
     }
@@ -27,15 +31,18 @@ public class CastElScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.Space))
+        if (!stop)
         {
-            transform.Translate(Vector3.back * Time.deltaTime * speed);
-        }
+            if (Input.GetKey(KeyCode.Space))
+            {
+                transform.Translate(Vector3.back * Time.deltaTime * speed);
+            }
 
-        else
-        {
-            transform.Translate(Vector3.right * Time.deltaTime * speed);
+            else
+            {
+                transform.Translate(Vector3.right * Time.deltaTime * speed);
 
+            }
         } 
     }
 
@@ -50,6 +57,7 @@ public class CastElScript : MonoBehaviour
             _as.PlayOneShot(winSound);
             StartCoroutine(WaitForIt(3.0F));
             Instantiate(goalParticle);
+            stop = true;
 
 
         }
@@ -58,7 +66,13 @@ public class CastElScript : MonoBehaviour
         {
             Debug.Log("Attempt " + attempt + " failed! Restarting the game...");
             attempt += 1;
-            ReloadingScene();
+            StartCoroutine(Restarter(2.0F));
+            stop = true;
+            if(collision.gameObject.name == "Cast-er")
+            {
+                int randomInsult = Random.Range(0, insults.Length);
+                _as.PlayOneShot(insults[randomInsult]);
+            }
         }
     }
 
@@ -68,10 +82,10 @@ public class CastElScript : MonoBehaviour
         SceneManager.LoadScene("SecondLevel");
     }
 
-    void ReloadingScene()
+    IEnumerator Restarter(float waitTime)
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        yield return new WaitForSeconds(waitTime);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);;
     }
-
 
 }

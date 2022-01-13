@@ -12,31 +12,61 @@ public class CastErScript : MonoBehaviour
     public GameObject CastingRay;
     private bool CastingFlag = false;
 
+    public AudioSource casterAudioSource;
+
+    private bool stop = false;
+
     void Start()
     {
-      
-
+        stop = false;
+        CastingRay.SetActive(false);
+        casterAudioSource.Play();
     }
 
 
 
     void Update()
     {
-        if(walkingLeft)     //depending on state of walkdirection flag, either walk left or up, state of the flag is set below on collision
+        if (!stop)
         {
-            transform.Translate(Vector3.left * Time.deltaTime * speed); 
+            if(walkingLeft)     //depending on state of walkdirection flag, either walk left or up, state of the flag is set below on collision
+            {
+                transform.Translate(Vector3.left * Time.deltaTime * speed); 
+            }
+            else
+            {
+                transform.Translate(Vector3.forward * Time.deltaTime * speed);
+            }
         }
-        else
-        {
-            transform.Translate(Vector3.forward * Time.deltaTime * speed);
-        }
+
     }
    
-    
-   private void OnTriggerEnter(Collider other)   
-   {    
-       //Debug.Log("hit");
-       if(other.tag == "Wall")      //if caster walks into a wall, the walk-direction flag is changed
+    private void OnTriggerEnter(Collider other)
+    {
+           if(other.tag == "CastEl" && !CastingFlag)
+       {
+           CastingRay.SetActive(true);
+           CastingFlag = true;
+       }
+               if(other.tag == "CastEl")
+        {
+            CastingRay.SetActive(false);
+            CastingFlag = false;
+        }
+    }
+
+
+    void OnCollisionEnter(Collision collision)
+    {
+
+        if(collision.gameObject.name == "Cast-el")
+        {
+            stop = true;
+            casterAudioSource.Stop();
+        }
+
+        
+        if(collision.gameObject.tag == "Wall")      //if caster walks into a wall, the walk-direction flag is changed
        {
            if(walkingLeft)
            {
@@ -47,12 +77,7 @@ public class CastErScript : MonoBehaviour
                walkingLeft = true;
            }
        }
+    }
 
-        if(other.tag == "CastEl" && !CastingFlag)
-       {
-           Instantiate(CastingRay, transform);
-           CastingFlag = true;
-       }
-   }
 
 }
