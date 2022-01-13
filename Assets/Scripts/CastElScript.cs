@@ -66,7 +66,7 @@ public class CastElScript : MonoBehaviour
         {
             Debug.Log("Attempt " + attempt + " failed! Restarting the game...");
             attempt += 1;
-            StartCoroutine(Restarter(2.0F));
+            StartCoroutine(Restarter(3.0F));
             stop = true;
             if(collision.gameObject.name == "Cast-er")
             {

@@ -48,11 +48,6 @@ public class CastErScript : MonoBehaviour
            CastingRay.SetActive(true);
            CastingFlag = true;
        }
-               if(other.tag == "CastEl")
-        {
-            CastingRay.SetActive(false);
-            CastingFlag = false;
-        }
     }
 
 
@@ -65,7 +60,7 @@ public class CastErScript : MonoBehaviour
             casterAudioSource.Stop();
         }
 
-        
+
         if(collision.gameObject.tag == "Wall")      //if caster walks into a wall, the walk-direction flag is changed
        {
            if(walkingLeft)
@@ -77,6 +72,15 @@ public class CastErScript : MonoBehaviour
                walkingLeft = true;
            }
        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if(other.tag == "CastEl")
+        {
+            CastingRay.SetActive(false);
+            CastingFlag = false;
+        }
     }
 
 
