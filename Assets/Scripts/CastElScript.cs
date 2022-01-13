@@ -58,20 +58,20 @@ public class CastElScript : MonoBehaviour
         {
             Debug.Log("Attempt " + attempt + " failed! Restarting the game...");
             attempt += 1;
-            transform.position = new Vector3(0f, 0f, 0f); // Reset Game by putting Cast-el back to the start
-            GameObject.FindGameObjectWithTag("CastEr").transform.position = new Vector3(16.1f, 0.00f, -7.02f); 
-            foreach (KeyValuePair<string, Vector3> kvp in dict)
-            {
-                GameObject.Find(kvp.Key).transform.position = kvp.Value;
-            }
+            ReloadingScene();
         }
     }
 
     IEnumerator WaitForIt(float waitTime)
-{
-    yield return new WaitForSeconds(waitTime);
-    SceneManager.LoadScene("SecondLevel");
-}
+    {
+        yield return new WaitForSeconds(waitTime);
+        SceneManager.LoadScene("SecondLevel");
+    }
+
+    void ReloadingScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 
 
 }

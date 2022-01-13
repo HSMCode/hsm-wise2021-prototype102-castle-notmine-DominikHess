@@ -9,6 +9,8 @@ public class CastErScript : MonoBehaviour
     public int speed = 1;
     private bool walkingLeft = false;   //define flag for walk-direction
     
+    public GameObject CastingRay;
+    private bool CastingFlag = false;
 
     void Start()
     {
@@ -33,7 +35,7 @@ public class CastErScript : MonoBehaviour
     
    private void OnTriggerEnter(Collider other)   
    {    
-       Debug.Log("hit");
+       //Debug.Log("hit");
        if(other.tag == "Wall")      //if caster walks into a wall, the walk-direction flag is changed
        {
            if(walkingLeft)
@@ -45,5 +47,12 @@ public class CastErScript : MonoBehaviour
                walkingLeft = true;
            }
        }
+
+        if(other.tag == "CastEl" && !CastingFlag)
+       {
+           Instantiate(CastingRay, transform);
+           CastingFlag = true;
+       }
    }
+
 }
